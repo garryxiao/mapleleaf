@@ -1,0 +1,20 @@
+directories:
+  output: dist
+  buildResources: build
+appId: app.ca.mapleleafcollegiate
+copyright: Copyright ©2020 Maple Leaf Collegiate
+productName: Maple Leaf Collegiate
+files:
+  - filter:
+      - build/
+      - public/electron.ts
+      - '!node_modules/'
+mac:
+  icon: public/logo512.png
+  category: public.app-category.utilities
+win:
+  icon: public/logo512.png
+  target:
+    - nsis
+    - msi
+electronVersion: 8.2.0

@@ -1,0 +1,30 @@
+[0420/124833.034:ERROR:file_io.cc(89)] ReadExactly: expected 152, observed 120
+[0429/132321.782:ERROR:minidumpwritedump_with_crashpad_info.cc(435)] Failed to call MiniDumpWriteDump: 页面文件太小，无法完成操作。 (0x800705AF)
+[0429/132321.783:ERROR:minidumpwritedump_with_crashpad_info.cc(562)] Failed to write minidump file
+[0429/132321.783:ERROR:crash_report_exception_handler.cc(128)] TryMiniDumpWriteDumpWithCrashpadInfo failed
+[0429/132321.791:ERROR:process_info.cc(359)] UncheckedAllocate
+[0429/143217.119:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0430/201843.054:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0502/052556.927:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0502/053159.224:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0502/053212.989:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0502/063246.901:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0502/102101.503:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0502/102114.534:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0502/102116.387:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0512/102848.464:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0512/135619.255:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0512/143916.899:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0513/074621.907:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0513/074632.499:ERROR:minidumpwritedump_with_crashpad_info.cc(435)] Failed to call MiniDumpWriteDump: 页面文件太小，无法完成操作。 (0x800705AF)
+[0513/074632.499:ERROR:minidumpwritedump_with_crashpad_info.cc(562)] Failed to write minidump file
+[0513/074632.499:ERROR:crash_report_exception_handler.cc(128)] TryMiniDumpWriteDumpWithCrashpadInfo failed
+[0513/074632.510:ERROR:process_info.cc(359)] UncheckedAllocate
+[0513/080629.463:ERROR:minidumpwritedump_with_crashpad_info.cc(435)] Failed to call MiniDumpWriteDump: 内存资源不足，无法完成此操作。 (0x8007000E)
+[0513/080629.463:ERROR:minidumpwritedump_with_crashpad_info.cc(562)] Failed to write minidump file
+[0513/080629.463:ERROR:crash_report_exception_handler.cc(128)] TryMiniDumpWriteDumpWithCrashpadInfo failed
+[0513/102537.877:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0603/133252.130:ERROR:process_reader_win.cc(155)] SuspendThread: 拒绝访问。 (0x5)
+[0603/133252.486:ERROR:exception_snapshot_win.cc(99)] thread ID 16796 not found in process
+[0603/133253.046:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
+[0603/133254.942:WARNING:minidump_to_upload_parameters.cc(36)] duplicate key guid, discarding value e586806c-3e34-4822-b014-e504637484d7
