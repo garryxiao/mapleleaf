@@ -60,7 +60,7 @@ export default (props: RouteComponentProps) => {
 
     return (
         <MainContainer padding={0} ref={ref}>
-            <InfiniteTable rowHeight={53} records={10} height={height} padding={1} loadItems={loadItems} selectable={true}/>
+            <InfiniteTable rowHeight={53} height={height} padding={1} loadItems={loadItems} selectable={true}/>
         </MainContainer>
     )
 }

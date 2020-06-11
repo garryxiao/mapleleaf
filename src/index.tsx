@@ -12,7 +12,7 @@ ReactDOM.render(
     <UserStateProvider>
       <LanguageStateProvider>
         <NotifierProvider>
-          <BrowserRouter basename={process.env.PUBLIC_URL}>
+          <BrowserRouter>
             <App />
           </BrowserRouter>
         </NotifierProvider>
