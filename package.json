@@ -6,13 +6,14 @@
     "url": "https://www.etsoo.com"
   },
   "description": "Students management system of Maple Leaf Collegiate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "public/electron.ts",
-  "homepage": ".",
+  "homepage": "./",
   "private": false,
   "dependencies": {
     "@material-ui/core": "^4.9.12",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.55",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -63,6 +64,7 @@
     "productName": "Maple Leaf Collegiate",
     "files": [
       "build/",
+      "dist/",
       "public/electron.ts",
       "!node_modules/"
     ],

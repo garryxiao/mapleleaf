@@ -42,11 +42,14 @@ export const MainContainer = React.forwardRef<HTMLElement, React.PropsWithChildr
     // Padding
     const padding = props.padding == null ? 3 : props.padding
 
+    // Max width
+    const maxWidth = props.maxWidth == null ? false : props.maxWidth
+
     // Style
     const classes = useStyles({padding: padding})
 
     return (
-        <Container component="main" maxWidth={props.maxWidth} className={classes.paper} ref={ref}>
+        <Container component="main" maxWidth={maxWidth} className={classes.paper} ref={ref}>
             {props.children}
         </Container>
     )

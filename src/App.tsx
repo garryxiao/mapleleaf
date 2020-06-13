@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Route, Switch, withRouter, matchPath, RouteComponentProps } from 'react-router-dom'
 import { PrivateRoute, UserStateContext, UserController, useDimensions2 } from 'etsoo-react'
 
+import CustomerAdd from './customer/Add'
 import CustomerSearch from './customer/Search'
 import CustomerView from './customer/View'
 import Login from './public/Login'
@@ -16,9 +17,10 @@ const drawerWidth = 220
 
 // Routers
 const routers = [
-  { component: ChangePassword, label: 'Change Password', path: "/user/changepassword" },
-  { component: CustomerSearch, label: 'Students', path: "/customer/search" },
-  { component: CustomerView, label: 'View Student', path: "/customer/view/:id" },
+  { component: ChangePassword, label: 'Change Password', path: '/user/changepassword' },
+  { component: CustomerAdd, label: 'Add a student', path: '/customer/add' },
+  { component: CustomerSearch, label: 'Students', path: '/customer/search', search: true },
+  { component: CustomerView, label: 'View Student', path: '/customer/view/:id' },
   { component: Main, label: 'Home', path: "/main", exact: true }
 ]
 
@@ -29,10 +31,11 @@ const useStyles = makeStyles((theme) => (
       height: '100%'
     },
     main: {
+      width: '100%',
       display: 'flex'
     },
     content: {
-      flexGrow: 1,
+      width: '100%',
       height: '100%'
     }
   }
@@ -118,9 +121,11 @@ const App: React.FunctionComponent<RouteComponentProps> = (props) => {
 
   // Appbar
   const appBar = React.useMemo(() => {
-    // Current page name
-    const pageName = routers.find(router => matchPath(props.location.pathname, router))?.label || ''
-    return <AppMenuBar drawerWidth={drawerWidth} pageTitle={pageName} userName={state.name} ref={ref1} onDrawerOpen={onDrawerOpen} onSignout={onSignout}/>
+    // Current router
+    const router = routers.find(router => matchPath(props.location.pathname, router))
+
+    // Return menu bar
+    return <AppMenuBar drawerWidth={drawerWidth} pageTitle={router?.label} search={router?.search} userName={state.name} ref={ref1} onDrawerOpen={onDrawerOpen} onSignout={onSignout}/>
   }, [state.name, props.location.pathname])
 
   // Drawer
@@ -134,7 +139,7 @@ const App: React.FunctionComponent<RouteComponentProps> = (props) => {
   const routerSwitch = React.useMemo(() => {
     return (
       <Switch>
-          {routers.map(({label, ...rest}) =>
+          {routers.map(({label, search, ...rest}) =>
               <PrivateRoute key={label} authorized={authorized} {...rest} />
           )}
           <Route component={Login} />

@@ -4,12 +4,11 @@ import { MainContainer } from '../app/MainContainer'
 
 export default (props: RouteComponentProps<{id: (string | undefined)}>) => {
     // Parameters
-    const { id } = props.match.params
 
     // Return components
     return (
         <MainContainer>
-            <h1>View page, id: {id}</h1>
+            <h1>Add page</h1>
         </MainContainer>
     )
 }

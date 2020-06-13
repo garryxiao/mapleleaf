@@ -4,7 +4,7 @@ import { UserStateProvider, NotifierProvider } from 'etsoo-react'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-import { LanguageStateProvider } from './app/Settings'
+import { LanguageStateProvider, Settings } from './app/Settings'
 import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.render(
@@ -12,7 +12,7 @@ ReactDOM.render(
     <UserStateProvider>
       <LanguageStateProvider>
         <NotifierProvider>
-          <BrowserRouter basename={process.env.PUBLIC_URL}>
+          <BrowserRouter basename={Settings.homepage}>
             <App />
           </BrowserRouter>
         </NotifierProvider>

@@ -5,6 +5,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import MenuIcon from '@material-ui/icons/Menu'
 import LockIcon from '@material-ui/icons/Lock'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import { SearchBar } from 'etsoo-react'
 
 // Make styles
 const useStyles = makeStyles<Theme, ICustomStyle>((theme) => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles<Theme, ICustomStyle>((theme) => ({
         [theme.breakpoints.up('lg')]: {
           display: 'none',
         },
-        marginRight: theme.spacing(2)
+        marginRight: theme.spacing(0)
     },
     title: {
         flexGrow: 1
@@ -55,6 +56,11 @@ export interface AppMenuBarProps {
     pageTitle?: string
 
     /**
+     * Search bar
+     */
+    search?: boolean
+
+    /**
      * User name
      */
     userName?: string
@@ -64,7 +70,7 @@ export interface AppMenuBarProps {
  * App menu bar
  * @param props Properties
  */
-export const AppMenuBar = React.forwardRef<any, AppMenuBarProps>(({ drawerWidth, onDrawerOpen, onSignout, pageTitle, userName }, ref) => {
+export const AppMenuBar = React.forwardRef<any, AppMenuBarProps>(({ drawerWidth, onDrawerOpen, onSignout, pageTitle, search, userName }, ref) => {
     // Style
     const classes = useStyles({drawerWidth: drawerWidth})
 
@@ -73,6 +79,9 @@ export const AppMenuBar = React.forwardRef<any, AppMenuBarProps>(({ drawerWidth,
 
     // Is the menu opened
     const open = Boolean(anchorEl)
+
+    // Title ref
+    const titleRef = React.useRef<HTMLElement>(null)
 
     // Icon click for menu
     const menuIconHandler = (event: React.MouseEvent<HTMLElement>) => {
@@ -84,15 +93,38 @@ export const AppMenuBar = React.forwardRef<any, AppMenuBarProps>(({ drawerWidth,
         setAnchorEl(null)
     }
 
+    // Search bar focus handler
+    const onBarFocus = () => {
+        if(titleRef.current)
+            titleRef.current.style.display = 'none'
+    }
+
+    // Search bar blur handler
+    const onBarBlur = () => {
+        if(titleRef.current)
+            titleRef.current.style.display = 'block'
+    }
+
     return (
         <AppBar position="sticky" className={classes.appBar} ref={ref}>
             <Toolbar>
                 <IconButton className={classes.menuButton} edge="start" color="inherit" onClick={onDrawerOpen}>
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h6" className={classes.title}>
+                <Typography variant="h6" className={classes.title} ref={titleRef} noWrap>
                     {pageTitle}
                 </Typography>
+                {search && (
+                    <>
+                        <Hidden smUp>
+                            <SearchBar onFocus={onBarFocus} onBlur={onBarBlur} />
+                        </Hidden>
+                        <Hidden xsDown>
+                            <SearchBar />
+                        </Hidden>
+                    </>
+                    
+                )}
                 <div>
                     <Hidden xsDown>
                         <Button

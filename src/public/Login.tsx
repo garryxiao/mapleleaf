@@ -116,16 +116,19 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
     }
 
     // Redirect after successfully log in
-    // referer should not contain '://' to avoid any open redirect attacks posibility
-    let redirectUrl
+    let redirectUrl = null
     const referrer = (props.location.state as PrivateRouteRedirectState)?.referrer
-    if(referrer && referrer.pathname && !referrer.pathname.includes('://')) {
-        redirectUrl = referrer.pathname + referrer.search
-    } else {
-        redirectUrl = `${process.env.PUBLIC_URL}/main`
+    if(referrer && referrer.pathname)
+      redirectUrl = referrer.pathname + referrer.search
+    else if(props.location.search) {
+      redirectUrl = new URLSearchParams(props.location.search).get('redirect')
     }
 
-    console.log(redirectUrl)
+    // referer should not contain '://' to avoid any open redirect attacks posibility
+    if(redirectUrl == null || redirectUrl === '/login' || redirectUrl.indexOf('://') > 0) {
+        redirectUrl = '/main'
+    }
+
     props.history.push(redirectUrl)
   }, [api.singleton, props, updateResult])
 
