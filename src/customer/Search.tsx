@@ -3,8 +3,9 @@ import { RouteComponentProps } from "react-router-dom"
 import { UserStateContext, CustomerController, CustomerSearchModel, useDimensions, searchLayoutFormat, InfiniteTable, ISearchResult, CustomerSearchPersonItem, ListItemRendererProps, SearchPageFabs, SearchPageFabsMethods, IDynamicData, InfiniteTableMethods, Utils } from 'etsoo-react'
 import { MainContainer } from '../app/MainContainer'
 import { Skeleton } from '@material-ui/lab'
-import { Typography, makeStyles, Card, CardHeader, CardContent, Avatar, Grid } from '@material-ui/core'
+import { Typography, makeStyles, Card, CardHeader, CardContent, Avatar, Grid, TableCell } from '@material-ui/core'
 import { red } from '@material-ui/core/colors'
+import { LanguageStateContext } from '../app/Settings'
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -14,6 +15,13 @@ const useStyles = makeStyles((theme) => ({
     bold: {
         paddingLeft: theme.spacing(1),
         fontWeight: 'bold'  
+    },
+    total: {
+        display: 'grid',
+        gridTemplateColumns: '50% 50%'
+    },
+    totalCell: {
+        fontWeight: 'bold'
     },
     card: {
         height: '100%'
@@ -61,9 +69,6 @@ export default (props: RouteComponentProps) => {
 
     // Hide header
     const hideHeader = md ? true : false
-
-    // Row class
-    const itemRendererClass = md ? classes.tableRow : undefined
 
     // Scroller
     let scroller: HTMLElement | undefined = undefined
@@ -145,42 +150,100 @@ export default (props: RouteComponentProps) => {
         fabsRef.current?.scollChange(!zero)
     }
 
-    // Mobile list item renderer
-    const itemRenderer = md ? (props: ListItemRendererProps, className: string) => {
-        const data = props.data as CustomerSearchPersonItem
-        if(data) {
-            if(data.loading) {
-                return <Skeleton variant="text" animation="wave" />
+    // Footer renderer
+    const footerRenderer = md ? undefined : (props: ListItemRendererProps, className: string, parentClasses: string[]) => {
+        if(md) {
+            parentClasses.splice(0)
+            parentClasses.push(classes.tableRow)
+
+            if(props.records === 0) {
+                return (
+                    <Card className={classes.card}>
+                        <CardContent>
+                            <LanguageStateContext.Consumer>{value => value.state.labels['no_match']}</LanguageStateContext.Consumer>
+                        </CardContent>
+                    </Card>
+                )
             } else {
-                return <Card className={classes.card}>
-                    <CardHeader
-                        avatar={
-                            <Avatar className={classes.avatar}>{data.gender}</Avatar>
-                        }
-                        title={data.name}
-                        subheader={Utils.joinItems(data.birthday ? data.birthday.toString() : undefined, data.address)}
-                    />
-                    <CardContent className={classes.cardContent}>
-                        <Grid container spacing={1}>
-                            <Grid item xs={12} sm={6}>
-                                <Typography component="span">{formatLabel('cid')}:</Typography>
-                                <Typography component="span" className={classes.bold}>{data.cid}</Typography>
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Typography component="span">{formatLabel('entry_date')}:</Typography>
-                                <Typography component="span" className={classes.bold}>{data.entry_date}</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant="body2" className={classes.description}>{data.description}</Typography>
-                            </Grid>
-                        </Grid>
-                    </CardContent>
-                </Card>
+                return (
+                    <Card className={classes.card}>
+                        <CardContent className={classes.total + ' ' + classes.totalCell}>
+                            <div><LanguageStateContext.Consumer>{value => value.state.labels['total'] + ': '}</LanguageStateContext.Consumer></div>
+                            <div style={{textAlign: 'right'}}>{props.records}</div>
+                        </CardContent>
+                    </Card>
+                )
             }
         } else {
-            return <>
-                {props.index}
-            </>
+            if(props.records === 0) {
+                return (
+                    <TableCell
+                        component="div"
+                        className={className}
+                        style={{textAlign: 'center'}}
+                    >
+                        <LanguageStateContext.Consumer>{value => value.state.labels['no_match']}</LanguageStateContext.Consumer>
+                    </TableCell>
+                )
+            } else {
+                parentClasses.push(classes.total)
+                className += ' ' + classes.totalCell
+                return (
+                    <>
+                        <TableCell
+                            component="div"
+                            className={className}
+                        >
+                            <LanguageStateContext.Consumer>{value => value.state.labels['total'] + ': '}</LanguageStateContext.Consumer>
+                        </TableCell>
+                        <TableCell
+                            component="div"
+                            className={className}
+                            style={{textAlign: 'right'}}
+                        >
+                            {props.records}
+                        </TableCell>
+                    </>
+                )
+            }
+        }
+    }
+
+    // Mobile list item renderer
+    const itemRenderer = md ? (props: ListItemRendererProps, className: string, parentClasses: string[]) => {
+        // Change parent style
+        // parentClasses.splice(0, parentClasses.length)
+        parentClasses.splice(0, 1)
+        parentClasses.push(classes.tableRow)
+
+        const data = props.data! as CustomerSearchPersonItem
+        if(data.loading) {
+            return <Skeleton variant="text" animation="wave" />
+        } else {
+            return <Card className={classes.card}>
+                <CardHeader
+                    avatar={
+                        <Avatar className={classes.avatar}>{data.gender}</Avatar>
+                    }
+                    title={data.name}
+                    subheader={Utils.joinItems(data.birthday ? data.birthday.toString() : undefined, data.address)}
+                />
+                <CardContent className={classes.cardContent}>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12} sm={6}>
+                            <Typography component="span">{formatLabel('cid')}:</Typography>
+                            <Typography component="span" className={classes.bold}>{data.cid}</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Typography component="span">{formatLabel('entry_date')}:</Typography>
+                            <Typography component="span" className={classes.bold}>{data.entry_date}</Typography>
+                        </Grid>
+                        <Grid item>
+                            <Typography variant="body2" className={classes.description}>{data.description}</Typography>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
         }
     } : undefined
 
@@ -235,7 +298,7 @@ export default (props: RouteComponentProps) => {
 
     return (
         <MainContainer padding={0} ref={ref}>
-            <InfiniteTable ref={tableRef} rowHeight={rowHeight} height={height} onItemClick={onItemClick} onScrollChange={onScrollChange} padding={1} hideHeader={hideHeader} sortable={true} loadItems={loadItems} itemRenderer={itemRenderer} itemRendererClass={itemRendererClass}/>
+            <InfiniteTable ref={tableRef} rowHeight={rowHeight} height={height} onItemClick={onItemClick} onScrollChange={onScrollChange} padding={1} hideHeader={hideHeader} sortable={true} loadItems={loadItems} footerRenderer={footerRenderer} itemRenderer={itemRenderer}/>
             <SearchPageFabs onAddClick={onAddClick} onGoTopClick={onGoTopClick} onMoreClick={onMoreClick} ref={fabsRef} />
         </MainContainer>
     )

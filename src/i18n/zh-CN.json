@@ -4,7 +4,9 @@
     "etsoo": "亿速思维",
     "language": "语言",
     "no": "否",
+    "no_match": "未找到匹配项!",
     "ok": "确定",
     "result": "结果",
+    "total": "合计",
     "yes": "是"
 }

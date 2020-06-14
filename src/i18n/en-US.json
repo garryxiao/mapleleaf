@@ -4,7 +4,9 @@
     "etsoo": "ETSOO",
     "language": "Language",
     "no": "No",
+    "no_match": "No match found!",
     "ok": "OK",
     "result": "Result",
+    "total": "Total",
     "yes": "Yes"
 }

@@ -29,9 +29,22 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: 'calc(100% - 60px)',
       marginBottom: -60
     },
+    logoContainer: {
+      width: '100%',
+      position: 'relative',
+      overflow: 'hidden',
+      height: 'auto',
+      padding: '38.44% 0 0 0', /* 38.44% = 100 / (w / h) = 100 / (640 / 246) */
+      boxShadow: '3px 2px 2px #aaa'
+    },
     logo: {
-        maxWidth: '100%',
-        boxShadow: '3px 2px 2px #aaa'
+      maxWidth: '100%',
+      maxHeight: '100%',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0
     },
     submit: {
       margin: theme.spacing(3, 0, 2),
@@ -190,7 +203,9 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <img src={process.env.PUBLIC_URL + '/logo.jpg'} alt="Logo" className={classes.logo}/>
+      <div className={classes.logoContainer}>
+        <img src={process.env.PUBLIC_URL + '/logo.jpg'} alt="Logo" className={classes.logo}/>
+      </div>
       <LanguageChooser className={classes.language} items={Settings.supportedLanguages} title="Languages" onClose={closeLanguageChoose} selectedValue={Settings.currentLanguage} />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
