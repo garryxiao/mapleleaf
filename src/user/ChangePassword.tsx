@@ -1,5 +1,5 @@
 import React from 'react'
-import { ChangePasswordModel, UserStateContext, useFormValidator, UserController } from 'etsoo-react'
+import { ChangePasswordModel, UserStateContext, useFormValidator, UserLoginController } from 'etsoo-react'
 import { TextField, Button } from '@material-ui/core'
 import * as Yup from 'yup'
 import { RouteComponentProps } from 'react-router-dom'
@@ -30,7 +30,7 @@ const ChangePassword: React.FunctionComponent<RouteComponentProps> = (props) => 
     const { state, dispatch } = React.useContext(UserStateContext)
 
     // Controller, should be in the function main body
-    const api = new UserController(state, { defaultLoading: true }, dispatch)
+    const api = new UserLoginController(state, { defaultLoading: true }, dispatch)
 
     // Submit form
     async function doSubmit(event: React.FormEvent<HTMLFormElement>) {

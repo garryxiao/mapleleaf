@@ -1,5 +1,5 @@
 import React from "react"
-import { Container, makeStyles } from "@material-ui/core"
+import { Container, makeStyles, Theme } from "@material-ui/core"
 
 /**
  * Main container properties
@@ -16,15 +16,10 @@ export interface MainContainerProps {
     padding?: number
 }
 
-// Custom style
-interface ICustomStyle {
-    padding: number
-}
-
 // Styles
-const useStyles = makeStyles<any, ICustomStyle>((theme) => ({
+const useStyles = makeStyles<Theme, {padding?: number}>((theme) => ({
     paper: {
-        padding: props => theme.spacing(props.padding),
+        padding: props => theme.spacing(props.padding == null ? 3 : props.padding),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -38,19 +33,13 @@ const useStyles = makeStyles<any, ICustomStyle>((theme) => ({
  * React.forwardRef forward the Container ref opt-in
  * @param props Properties
  */
-export const MainContainer = React.forwardRef<HTMLElement, React.PropsWithChildren<MainContainerProps>>((props, ref) => {
-    // Padding
-    const padding = props.padding == null ? 3 : props.padding
-
-    // Max width
-    const maxWidth = props.maxWidth == null ? false : props.maxWidth
-
+export const MainContainer = React.forwardRef<HTMLElement, React.PropsWithChildren<MainContainerProps>>(({children, maxWidth, padding, ...rest}, ref) => {
     // Style
-    const classes = useStyles({padding: padding})
+    const classes = useStyles({padding})
 
     return (
-        <Container component="main" maxWidth={maxWidth} className={classes.paper} ref={ref}>
-            {props.children}
+        <Container component="main" maxWidth={maxWidth == null ? false : maxWidth} className={classes.paper} ref={ref}>
+            {children || <></>}
         </Container>
     )
 })

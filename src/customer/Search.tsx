@@ -10,7 +10,10 @@ import { LanguageStateContext } from '../app/Settings'
 // Styles
 const useStyles = makeStyles((theme) => ({
     tableRow: {
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
+        [theme.breakpoints.down('xs')]: {
+            padding: theme.spacing(1)
+        }
     },
     bold: {
         paddingLeft: theme.spacing(1),
@@ -212,8 +215,8 @@ export default (props: RouteComponentProps) => {
     // Mobile list item renderer
     const itemRenderer = md ? (props: ListItemRendererProps, className: string, parentClasses: string[]) => {
         // Change parent style
-        // parentClasses.splice(0, parentClasses.length)
-        parentClasses.splice(0, 1)
+        parentClasses.splice(0, parentClasses.length)
+        // parentClasses.splice(0, 1)
         parentClasses.push(classes.tableRow)
 
         const data = props.data! as CustomerSearchPersonItem

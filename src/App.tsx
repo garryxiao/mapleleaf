@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Route, Switch, withRouter, matchPath, RouteComponentProps } from 'react-router-dom'
-import { PrivateRoute, UserStateContext, UserController, useDimensions2 } from 'etsoo-react'
+import { PrivateRoute, UserStateContext, UserLoginController, useDimensions2 } from 'etsoo-react'
 
 import CustomerAdd from './customer/Add'
 import CustomerSearch from './customer/Search'
@@ -55,7 +55,7 @@ const App: React.FunctionComponent<RouteComponentProps> = (props) => {
   const authorized:boolean = (state == null ? false : state.authorized)
 
   // Controller
-  const api = new UserController(state, {}, dispatch)
+  const api = new UserLoginController(state, {}, dispatch)
 
   // Drawer state
   const [ drawerOpen, setDrawerOpen ] = React.useState(false)

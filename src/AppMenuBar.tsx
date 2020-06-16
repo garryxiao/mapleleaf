@@ -140,6 +140,7 @@ export const AppMenuBar = React.forwardRef<any, AppMenuBarProps>(({ drawerWidth,
                     <Hidden smUp>
                         <IconButton
                             color="inherit"
+                            edge="end"
                             onClick={menuIconHandler}
                         >
                             <AccountCircle />

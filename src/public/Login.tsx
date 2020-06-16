@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { useFormValidator, PrivateRouteRedirectState, UserStateContext, LanguageChooser, LanguageAction, LoginModel, UserController, ILanguageItem, IResult, LoginResultData, UserLoginSuccess, IUserUpdate, IViewModel, SaveLogin } from 'etsoo-react'
+import { useFormValidator, PrivateRouteRedirectState, UserStateContext, LanguageChooser, LanguageAction, LoginModel, UserLoginController, ILanguageItem, IResult, LoginResultData, UserLoginSuccess, IUserUpdate, IViewModel, SaveLogin } from 'etsoo-react'
 import { Settings, LanguageStateContext } from './../app/Settings'
 
 import { Button, Container, Avatar, Typography, TextField, FormControlLabel, Link, Box, Checkbox, makeStyles } from '@material-ui/core'
@@ -94,7 +94,7 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
   const { blurHandler, changeHandler, errors, texts, updateResult, validateForm } = useFormValidator(validationSchemas, 'id')
 
   // Controller, should be in the function main body
-  const api = new UserController(userState, {}, userDispatch)
+  const api = new UserLoginController(userState, {}, userDispatch)
 
   // User component ref
   const userRef = React.useRef<HTMLInputElement>()
