@@ -153,10 +153,6 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
       if(userRef && userRef.current)
         userRef.current.value = saveLoginData.rawId
 
-      // If id is ready, set focus on password component
-      if(passwordRef && passwordRef.current)
-        passwordRef.current.focus()
-
       // Try to login with token
       if(saveLoginData.token) {
         // Model
@@ -173,7 +169,19 @@ const Login: React.FunctionComponent<RouteComponentProps> = (props) => {
           // Do result only successful
           if(result.ok)
             loginResult(result)
+          else {
+            // Hide loading bar
+            api.singleton.showLoading(false)
+
+            // Focus the password input
+            if(passwordRef && passwordRef.current)
+              passwordRef.current.focus()
+          }
         })
+      } else {
+        // If id is ready, set focus on password component
+        if(passwordRef && passwordRef.current)
+          passwordRef.current.focus()
       }
     }
   }, []) // [] means only executed one time

@@ -66,7 +66,7 @@ function Main() {
                 className={classes.listPanel}
                 items={customers}
                 itemRenderer={(item: CustomerListItem, index: number) => (
-                    <ListItem button component={Link} to={`/customer/view/${item.id}`} className={index%2 === 0 ? classes.listDark : classes.listLight}>
+                    <ListItem button key={item.id} component={Link} to={`/customer/view/${item.id}`} className={index%2 === 0 ? classes.listDark : classes.listLight}>
                         <Grid container spacing={2}>
                             <Grid item xs={6} sm={3}>{item.name}</Grid>
                             <Grid item xs={6} sm={3}>{item.cid}</Grid>

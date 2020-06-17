@@ -2,8 +2,7 @@ import React from 'react'
 import { RouteComponentProps } from "react-router-dom"
 import { UserStateContext, CustomerController, CustomerSearchModel, useDimensions, searchLayoutFormat, InfiniteTable, ISearchResult, CustomerSearchPersonItem, ListItemRendererProps, SearchPageFabs, SearchPageFabsMethods, IDynamicData, InfiniteTableMethods, Utils } from 'etsoo-react'
 import { MainContainer } from '../app/MainContainer'
-import { Skeleton } from '@material-ui/lab'
-import { Typography, makeStyles, Card, CardHeader, CardContent, Avatar, Grid, TableCell } from '@material-ui/core'
+import { Typography, makeStyles, Card, CardHeader, CardContent, Avatar, Grid, TableCell, CircularProgress } from '@material-ui/core'
 import { red } from '@material-ui/core/colors'
 import { LanguageStateContext } from '../app/Settings'
 
@@ -219,9 +218,10 @@ export default (props: RouteComponentProps) => {
         // parentClasses.splice(0, 1)
         parentClasses.push(classes.tableRow)
 
+        // <Skeleton variant="text" animation="wave" />
         const data = props.data! as CustomerSearchPersonItem
         if(data.loading) {
-            return <Skeleton variant="text" animation="wave" />
+            return <CircularProgress size={20} />
         } else {
             return <Card className={classes.card}>
                 <CardHeader
