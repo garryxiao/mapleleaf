@@ -1,10 +1,10 @@
 import React from 'react'
 import { RouteComponentProps } from "react-router-dom"
-import { UserStateContext, CustomerController, CustomerSearchModel, useDimensions, searchLayoutFormat, InfiniteTable, ISearchResult, CustomerSearchPersonItem, ListItemRendererProps, SearchPageFabs, SearchPageFabsMethods, IDynamicData, InfiniteTableMethods, Utils } from 'etsoo-react'
+import { UserStateContext, CustomerController, CustomerSearchModel, useDimensions, searchLayoutFormat, ISearchResult, CustomerSearchPersonItem, ListItemRendererProps, IDynamicData, Utils, SearchPage } from 'etsoo-react'
 import { MainContainer } from '../app/MainContainer'
-import { Typography, makeStyles, Card, CardHeader, CardContent, Avatar, Grid, TableCell, CircularProgress } from '@material-ui/core'
+import { Typography, makeStyles, Card, CardHeader, CardContent, Avatar, Grid, CircularProgress } from '@material-ui/core'
+import BarChartIcon from '@material-ui/icons/BarChart'
 import { red } from '@material-ui/core/colors'
-import { LanguageStateContext } from '../app/Settings'
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default (props: RouteComponentProps) => {
+function Search(props: RouteComponentProps) {
     // Style
     const classes = useStyles()
 
@@ -58,33 +58,13 @@ export default (props: RouteComponentProps) => {
     // Calculate dimensions
     const {ref, dimensions} = useDimensions<HTMLElement>(true)
 
-    // Fabs reference
-    const fabsRef = React.useRef<SearchPageFabsMethods>(null)
+    // Read cache data
+    const tryCache = props.history.action === 'POP'
 
     // Width & Height
     const width = (dimensions?.width) || 0
     const height = (dimensions?.height) || 0
-
-    // rowHeight
     const md = (width <= 960)
-    const rowHeight = md ? 224 : 53
-
-    // Hide header
-    const hideHeader = md ? true : false
-
-    // Scroller
-    let scroller: HTMLElement | undefined = undefined
-
-    // Clear cache
-    let tableCurrent: InfiniteTableMethods | undefined  = undefined
-
-    // Infinite table ref
-    const tableRef = (current: InfiniteTableMethods) => {
-        tableCurrent = current
-    }
-
-    // Search parameters
-    const [ searchProps ] = React.useState<IDynamicData>({})
 
     // Format header labels
     const formatLabels = (results: ISearchResult<CustomerSearchPersonItem>) => {
@@ -107,6 +87,18 @@ export default (props: RouteComponentProps) => {
         }
     }
 
+    // More actions
+    const moreActions = [
+        {
+            label: 'Reports',
+            action: '/customer/reports',
+            icon: <BarChartIcon/>
+        }
+    ]
+
+    // Search parameters
+    const [ searchProps ] = React.useState<IDynamicData>({})
+
     // Load datal
     const loadItems = async (page: number, records: number, orderIndex?: number) => {
         // Combine parameters
@@ -123,98 +115,11 @@ export default (props: RouteComponentProps) => {
         return results
     }
 
-    // Item click handler
-    const onItemClick = md ? undefined : (event: React.MouseEvent, item?: CustomerSearchPersonItem) => {
-        if(item?.id)
-            props.history.push(`/customer/view/${item.id}`)
-    }
-
-    // Add handler
-    const onAddClick = (event: React.MouseEvent) => {
-        props.history.push('/customer/add')
-    }
-
-    // Go top handler
-    const onGoTopClick = (event: React.MouseEvent) => {
-        if(scroller) {
-            scroller.scrollTop = 0
-        }
-    }
-
-    // More handler
-    const onMoreClick = (event: React.MouseEvent) => {
-
-    }
-
-    // Scroll change handler
-    const onScrollChange = (scrollerDiv: HTMLElement, vertical: boolean, zero: boolean) => {
-        scroller = scrollerDiv
-        fabsRef.current?.scollChange(!zero)
-    }
-
-    // Footer renderer
-    const footerRenderer = md ? undefined : (props: ListItemRendererProps, className: string, parentClasses: string[]) => {
-        if(md) {
-            parentClasses.splice(0)
-            parentClasses.push(classes.tableRow)
-
-            if(props.records === 0) {
-                return (
-                    <Card className={classes.card}>
-                        <CardContent>
-                            <LanguageStateContext.Consumer>{value => value.state.labels['no_match']}</LanguageStateContext.Consumer>
-                        </CardContent>
-                    </Card>
-                )
-            } else {
-                return (
-                    <Card className={classes.card}>
-                        <CardContent className={classes.total + ' ' + classes.totalCell}>
-                            <div><LanguageStateContext.Consumer>{value => value.state.labels['total'] + ': '}</LanguageStateContext.Consumer></div>
-                            <div style={{textAlign: 'right'}}>{props.records}</div>
-                        </CardContent>
-                    </Card>
-                )
-            }
-        } else {
-            if(props.records === 0) {
-                return (
-                    <TableCell
-                        component="div"
-                        className={className}
-                        style={{textAlign: 'center'}}
-                    >
-                        <LanguageStateContext.Consumer>{value => value.state.labels['no_match']}</LanguageStateContext.Consumer>
-                    </TableCell>
-                )
-            } else {
-                parentClasses.push(classes.total)
-                className += ' ' + classes.totalCell
-                return (
-                    <>
-                        <TableCell
-                            component="div"
-                            className={className}
-                        >
-                            <LanguageStateContext.Consumer>{value => value.state.labels['total'] + ': '}</LanguageStateContext.Consumer>
-                        </TableCell>
-                        <TableCell
-                            component="div"
-                            className={className}
-                            style={{textAlign: 'right'}}
-                        >
-                            {props.records}
-                        </TableCell>
-                    </>
-                )
-            }
-        }
-    }
-
     // Mobile list item renderer
     const itemRenderer = md ? (props: ListItemRendererProps, className: string, parentClasses: string[]) => {
         // Change parent style
         parentClasses.splice(0, parentClasses.length)
+
         // parentClasses.splice(0, 1)
         parentClasses.push(classes.tableRow)
 
@@ -250,59 +155,22 @@ export default (props: RouteComponentProps) => {
         }
     } : undefined
 
-    // Search seed
-    let searchSeed: number
-
-    // Search data
-    const searchData = () => {
-        if(searchSeed > 0)
-            window.clearTimeout(searchSeed)
-
-        // Avoid unnecessary API calls
-        searchSeed = window.setTimeout(() => {
-            // Cache the keywords
-            Utils.cacheSessionString(searchProps['sc'], Utils.getLocationKey('keyword'))
-
-            // Reset and search
-            tableCurrent?.reset()
-        }, 360)
+    // Add handler
+    const onAddClick = (event: React.MouseEvent) => {
+        props.history.push('/customer/add')
     }
 
-    React.useEffect(() => {
-        // Search bar input component
-        const input = api.singleton.settings.searchInput
-
-        // Search bar input event handler
-        const onInput = (event: Event) => {
-            searchProps['sc'] = input?.value
-            searchData()
-        }
-
-        if(input) {
-            // Get the cached keywords
-            input.value = Utils.cacheSessionDataGet(Utils.getLocationKey('keyword')) || ''
-
-            // Add the event handler
-            input.addEventListener('input', onInput)
-        }
-
-        return () => {
-            if(searchSeed > 0)
-                window.clearTimeout(searchSeed)
-
-            if(input) {
-                // Remove the event handler
-                input.removeEventListener('input', onInput)
-            }
-
-            tableCurrent?.clearCache()
-        }
-    })
+    // Item click handler
+    const onItemClick = md ? undefined : (event: React.MouseEvent, item?: CustomerSearchPersonItem) => {
+        if(item?.id)
+            props.history.push(`/customer/view/${item.id}`)
+    }
 
     return (
         <MainContainer padding={0} ref={ref}>
-            <InfiniteTable ref={tableRef} rowHeight={rowHeight} height={height} onItemClick={onItemClick} onScrollChange={onScrollChange} padding={1} hideHeader={hideHeader} sortable={true} loadItems={loadItems} footerRenderer={footerRenderer} itemRenderer={itemRenderer}/>
-            <SearchPageFabs onAddClick={onAddClick} onGoTopClick={onGoTopClick} onMoreClick={onMoreClick} ref={fabsRef} />
+            <SearchPage height={height} itemRenderer={itemRenderer} loadItems={loadItems} moreActions={moreActions} onAddClick={onAddClick} onItemClick={onItemClick}  padding={1} searchProps={searchProps} tryCache={tryCache} width={width} />
         </MainContainer>
     )
 }
+
+export default Search

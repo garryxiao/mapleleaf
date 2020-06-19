@@ -2,6 +2,7 @@ import React from 'react'
 import { Hidden, Drawer, List, ListItemText, ListItem, Divider, makeStyles, Theme, ListItemIcon } from '@material-ui/core'
 import HomeIcon from '@material-ui/icons/Home'
 import PeopleIcon from '@material-ui/icons/People'
+import BarChartIcon from '@material-ui/icons/BarChart'
 import { Link } from 'react-router-dom'
 
 /**
@@ -65,6 +66,10 @@ export const AppDrawer = ({ drawerWidth, onClose, open, title }: AppDrawerProps)
         <ListItem button component={Link} to="/customer/search">
             <ListItemIcon><PeopleIcon/></ListItemIcon>
             <ListItemText primary="Students" />
+        </ListItem>
+        <ListItem button component={Link} to="/customer/reports">
+            <ListItemIcon><BarChartIcon/></ListItemIcon>
+            <ListItemText primary="Reports" />
         </ListItem>
     </List>
 

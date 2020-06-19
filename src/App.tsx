@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
-import { Route, Switch, withRouter, matchPath, RouteComponentProps } from 'react-router-dom'
+import { Route, Switch, withRouter, matchPath, RouteComponentProps, RouteProps } from 'react-router-dom'
 import { PrivateRoute, UserStateContext, UserLoginController, useDimensions2 } from 'etsoo-react'
 
 import CustomerAdd from './customer/Add'
 import CustomerSearch from './customer/Search'
 import CustomerView from './customer/View'
+import CustomerReports from './customer/Reports'
 import Login from './public/Login'
 import Main from './main/Main'
 import { makeStyles, CssBaseline } from '@material-ui/core'
@@ -21,6 +22,7 @@ const routers = [
   { component: CustomerAdd, label: 'Add a student', path: '/customer/add' },
   { component: CustomerSearch, label: 'Students', path: '/customer/search', search: true },
   { component: CustomerView, label: 'View Student', path: '/customer/view/:id' },
+  { component: CustomerReports, label: 'Reports', path: '/customer/reports' },
   { component: Main, label: 'Home', path: "/main", exact: true }
 ]
 
@@ -122,7 +124,7 @@ const App: React.FunctionComponent<RouteComponentProps> = (props) => {
   // Appbar
   const appBar = React.useMemo(() => {
     // Current router
-    const router = routers.find(router => matchPath(props.location.pathname, router))
+    const router = routers.find(router => matchPath(props.location.pathname, router as RouteProps))
 
     // Return menu bar
     return <AppMenuBar drawerWidth={drawerWidth} pageTitle={router?.label} search={router?.search} userName={state.name} ref={ref1} onDrawerOpen={onDrawerOpen} onSignout={onSignout}/>
@@ -140,7 +142,7 @@ const App: React.FunctionComponent<RouteComponentProps> = (props) => {
     return (
       <Switch>
           {routers.map(({label, search, ...rest}) =>
-              <PrivateRoute key={label} authorized={authorized} {...rest} />
+              <PrivateRoute key={label} authorized={authorized} {...rest as RouteProps} />
           )}
           <Route component={Login} />
       </Switch>

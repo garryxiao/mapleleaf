@@ -1,9 +1,9 @@
 import React from 'react'
-import { UserStateContext, ListPanel, UserLoginController } from 'etsoo-react'
+import { UserStateContext, ListPanel, UserLoginController, Utils } from 'etsoo-react'
 import { MainContainer } from '../app/MainContainer'
-import { Link } from 'react-router-dom'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import { LanguageStateContext } from '../app/Settings'
-import { makeStyles, ListItem, Grid, IconButton } from '@material-ui/core'
+import { makeStyles, ListItem, Grid, CircularProgress } from '@material-ui/core'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import grey from '@material-ui/core/colors/grey'
 
@@ -13,6 +13,12 @@ const useStyles = makeStyles((theme) => ({
     },
     linkAdd: {
         paddingRight: theme.spacing(2)
+    },
+    listItem: {
+        height: '36px',
+        [theme.breakpoints.down('xs')]: {
+            height: '63px'
+        }
     },
     listDark: {
 
@@ -36,7 +42,7 @@ interface CustomerListItem {
     description?: string
 }
 
-function Main() {
+function Main(props: RouteComponentProps) {
     // Style
     const classes = useStyles()
 
@@ -49,15 +55,29 @@ function Main() {
     // Labels
     const { state: L } = React.useContext(LanguageStateContext)
 
-    // Customers
-    const [customers, updateCustomers] = React.useState<CustomerListItem[]>([])
+    // When back, keep data cache
+    const cacheKey = Utils.getLocationKey('lastest_customers')
+    let cache: boolean = false
+    let initCustomers: CustomerListItem[]
+    if(props.history.action === 'POP') {
+        initCustomers = Utils.cacheSessionDataParse<CustomerListItem[]>(cacheKey) || []
+        cache = true
+    } else {
+        initCustomers = Array(6).fill(undefined)
+    }
 
-    // useEffect once
+    // Customers
+    const [customers, updateCustomers] = React.useState<CustomerListItem[]>(initCustomers)
+
+    // Layout read
     React.useEffect(() => {
-        // mapleleaf, app folder name suggested
-        api.serviceSummary<{ customers: CustomerListItem[] }>('mapleleaf').then(results => {
-            updateCustomers(results.customers)
-        })
+        if(!cache) {
+            // mapleleaf, app folder name suggested
+            api.serviceSummary<{ customers: CustomerListItem[] }>('mapleleaf').then(results => {
+                Utils.cacheSessionData(results.customers, cacheKey)
+                updateCustomers(results.customers)
+            })
+        }
     }, [])
 
     return (
@@ -66,12 +86,14 @@ function Main() {
                 className={classes.listPanel}
                 items={customers}
                 itemRenderer={(item: CustomerListItem, index: number) => (
-                    <ListItem button key={item.id} component={Link} to={`/customer/view/${item.id}`} className={index%2 === 0 ? classes.listDark : classes.listLight}>
+                    item ? <ListItem button key={item.id} component={Link} to={`/customer/view/${item.id}`} className={classes.listItem + ' ' + (index%2 === 0 ? classes.listDark : classes.listLight)}>
                         <Grid container spacing={2}>
                             <Grid item xs={6} sm={3}>{item.name}</Grid>
                             <Grid item xs={6} sm={3}>{item.cid}</Grid>
                             <Grid item xs={12} sm={6} className={classes.listDescription}>{item.description}</Grid>
                         </Grid>
+                    </ListItem> : <ListItem key={index} className={classes.listItem + ' ' + (index%2 === 0 ? classes.listDark : classes.listLight)}>
+                        <Grid container spacing={2}><Grid item>{index === 0 && <CircularProgress size={12} />}</Grid></Grid>
                     </ListItem>
                 )}
                 title="Latest students"
