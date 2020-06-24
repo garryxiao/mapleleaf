@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: theme.spacing(2)
     },
     listItem: {
-        height: '36px',
+        height: '48px',
         [theme.breakpoints.down('xs')]: {
             height: '63px'
         }

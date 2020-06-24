@@ -42,6 +42,8 @@ function CustomerReports(props: RouteComponentProps) {
             api.report<IReportData[]>('creation').then(results => {
                 Utils.cacheSessionData(results, cacheKey)
                 updateItems(results)
+            }).catch((error:Error) => {
+                api.singleton.reportError(error.message)
             })
         }
     }, [cache])
@@ -54,7 +56,7 @@ function CustomerReports(props: RouteComponentProps) {
                     <LineChart data={items} layout="vertical">
                         <CartesianGrid strokeDasharray="3 3" />
                         <YAxis dataKey="label" type="category" />
-                        <XAxis/>
+                        <XAxis type="number"/>
                         <Tooltip />
                         <Legend />
                         <Line type="monotone" dataKey="v" layout="vertical" name="This year" stroke={theme.palette.primary.main} />
@@ -66,8 +68,8 @@ function CustomerReports(props: RouteComponentProps) {
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={items} layout="horizontal">
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="label" />
-                        <YAxis />
+                        <XAxis dataKey="label" type="category" />
+                        <YAxis type="number" />
                         <Tooltip />
                         <Legend />
                         <Line type="monotone" dataKey="v" name="This year" stroke={theme.palette.primary.main} />

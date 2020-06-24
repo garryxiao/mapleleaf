@@ -1,10 +1,9 @@
 import React from 'react'
-import { ChangePasswordModel, UserStateContext, useFormValidator, UserLoginController } from 'etsoo-react'
+import { ChangePasswordModel, UserStateContext, useFormValidator, UserLoginController, StyledForm } from 'etsoo-react'
 import { TextField, Button } from '@material-ui/core'
 import * as Yup from 'yup'
 import { RouteComponentProps } from 'react-router-dom'
 import { MainContainer } from '../app/MainContainer'
-import { StyledForm } from '../app/StyledForm'
 
 // Form validation schema
 const validationSchemas = Yup.object({
