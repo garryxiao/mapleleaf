@@ -26,7 +26,6 @@ function AddProgram(props: StepperFormItemProps) {
    
    return (
         <StepperFormChild formReady={props.formReady} validateForm={validateForm}>
-
         </StepperFormChild>
    )
 }

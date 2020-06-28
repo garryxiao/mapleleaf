@@ -160,15 +160,15 @@ function Search(props: RouteComponentProps) {
         props.history.push('/customer/add')
     }
 
-    // Item click handler
-    const onItemClick = md ? undefined : (event: React.MouseEvent, item?: CustomerSearchPersonItem) => {
+    // Item click handler, no action under md size
+    const onItemClick = (event: React.MouseEvent, item?: CustomerSearchPersonItem) => {
         if(item?.id)
             props.history.push(`/customer/view/${item.id}`)
     }
 
     return (
         <MainContainer padding={0} ref={ref}>
-            <SearchPage height={height} itemRenderer={itemRenderer} loadItems={loadItems} moreActions={moreActions} onAddClick={onAddClick} onItemClick={onItemClick}  padding={1} searchProps={searchProps} tryCache={tryCache} width={width} />
+            <SearchPage height={height} itemRenderer={itemRenderer} loadItems={loadItems} moreActions={moreActions} onAddClick={onAddClick} onItemClick={ onItemClick}  padding={1} searchProps={searchProps} tryCache={tryCache} width={width} />
         </MainContainer>
     )
 }

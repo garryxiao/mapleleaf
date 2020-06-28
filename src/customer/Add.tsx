@@ -1,6 +1,6 @@
 import React from 'react'
 import { RouteComponentProps } from "react-router-dom"
-import { StepperFormItem, StepperForm, StepperFormActionCallback, StepperFormAction } from 'etsoo-react'
+import { StepperFormItem, StepperForm, StepperFormActionCallback, StepperFormAction, IDynamicData } from 'etsoo-react'
 import { Grid, Button } from '@material-ui/core'
 import AddBasicInfo from './AddBasicInfo'
 import AddParents from './AddParents'
@@ -13,6 +13,11 @@ function CustomerAdd(props: RouteComponentProps) {
         { label: 'Parents', form: AddParents },
         { label: 'Program', form: AddProgram }
     ]
+
+    // Form submit handler
+    const submitHandler = (data: IDynamicData) => {
+
+    }
 
     // Create buttons
     const buttons = (callback: StepperFormActionCallback, last?: boolean) => {
@@ -46,7 +51,7 @@ function CustomerAdd(props: RouteComponentProps) {
                         last ? (
                             <Button
                                 variant="contained"
-                                color="primary"
+                                color="secondary"
                                 fullWidth
                                 onClick={() => callback(StepperFormAction.Submit)}
                             >
@@ -74,6 +79,7 @@ function CustomerAdd(props: RouteComponentProps) {
             buttons={buttons}
             steps={steps}
             maxWidth="md"
+            submitHandler={submitHandler}
             promptForExit="Are you sure you want to leave the page without saving the data you entered?"
         />
     )
