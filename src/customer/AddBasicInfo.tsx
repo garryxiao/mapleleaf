@@ -1,7 +1,15 @@
-import React from 'react'
-import * as Yup from 'yup'
-import { StepperFormItemProps, MaskedInput, useFormValidator, RadioGroupField, StepperFormChild } from 'etsoo-react'
-import { TextField, Grid, makeStyles } from '@material-ui/core'
+import React from 'react';
+import * as Yup from 'yup';
+import {
+    StepperFormItemProps,
+    MaskedInput,
+    useFormValidator,
+    RadioGroupField,
+    StepperFormChild,
+    ModuleCountryList,
+    ApiModule
+} from 'etsoo-react';
+import { TextField, Grid, makeStyles } from '@material-ui/core';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -13,35 +21,50 @@ const useStyles = makeStyles((theme) => ({
             paddingRight: theme.spacing(2)
         }
     }
-}))
+}));
 
 // Form validation schema
 const validationSchemas = Yup.object({
-    lastName: Yup.string()
-        .required("Please enter the family name"),
+    lastName: Yup.string().required('Please enter the family name'),
     firstName: Yup.string()
-        .required("Please enter the given name")
-        .notOneOf([Yup.ref('lastName'), null], "Given name and family name should be different"),
+        .required('Please enter the given name')
+        .notOneOf(
+            [Yup.ref('lastName'), null],
+            'Given name and family name should be different'
+        ),
     cid: Yup.string()
-        .matches(/^[A-Z]{2}-\d{4}-\d{4}$/gi, "The student # mush match IN-9999-9999 format"),
-    gender: Yup.string()
-        .required("Please choose the gender"),
-    birthday: Yup.date()
-        .required("Please enter the B.O.D")
-})
+        .required('Please enter the student#')
+        .matches(
+            /^[A-Z]{2}-\d{4}-\d{4}$/gi,
+            'The student # mush match IN-9999-9999 format'
+        ),
+    gender: Yup.string().required('Please choose the gender'),
+    birthday: Yup.date().required('Please enter the B.O.D')
+});
 
 /**
  * Add page basic info
  */
-function AddBasicInfo(props: StepperFormItemProps) {
+function AddBasicInfo(props: StepperFormItemProps): JSX.Element {
+    // Destruct
+    const { formReady } = props;
+
     // Styles
-    const classes = useStyles()
+    const classes = useStyles();
 
     // Form validator
-    const { blurHandler, changeHandler, blurFormHandler, changeFormHandler, errors, texts, validateForm } = useFormValidator(validationSchemas, 'lastName')
+    const {
+        blurHandler,
+        changeHandler,
+        blurFormHandler,
+        changeFormHandler,
+        errors,
+        texts,
+        validateForm
+    } = useFormValidator(validationSchemas, 'lastName');
 
     return (
-        <StepperFormChild formReady={props.formReady} validateForm={validateForm}>
+        <StepperFormChild formReady={formReady} validateForm={validateForm}>
             <Grid container justify="space-around">
                 <Grid item xs={12} sm={5} className={classes.halfGrid}>
                     <TextField
@@ -82,6 +105,7 @@ function AddBasicInfo(props: StepperFormItemProps) {
                             shrink: true
                         }}
                         mask="IN-9999-9999"
+                        defaultValue="IN-1234-1234"
                         label="MLC Student #"
                     />
                 </Grid>
@@ -113,7 +137,10 @@ function AddBasicInfo(props: StepperFormItemProps) {
                         name="gender"
                         required
                         label="Gender"
-                        items={[{ value: "F", label: "Female" }, { value: "M", label: "Male" }]}
+                        items={[
+                            { value: 'F', label: 'Female' },
+                            { value: 'M', label: 'Male' }
+                        ]}
                         error={errors('gender')}
                         helperText={texts('gender')}
                         onChange={changeFormHandler}
@@ -133,6 +160,19 @@ function AddBasicInfo(props: StepperFormItemProps) {
                             shrink: true
                         }}
                         label="B.O.D"
+                    />
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                    <ModuleCountryList
+                        label="Citizenship"
+                        name="country"
+                        module={ApiModule.Customer}
+                        onChange={(event, value, reason) =>
+                            console.log(event, value, reason)
+                        }
+                        InputLabelProps={{
+                            shrink: true
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12} sm={8}>
@@ -158,7 +198,7 @@ function AddBasicInfo(props: StepperFormItemProps) {
                 </Grid>
             </Grid>
         </StepperFormChild>
-    )
+    );
 }
 
-export default AddBasicInfo
+export default AddBasicInfo;

@@ -1,4 +1,4 @@
-window.Configs = {
+window.configs = {
     /**
      * Endpoint of the API service
      */
@@ -18,4 +18,4 @@ window.Configs = {
      * Web url of the cloud
      */
     webUrl: 'https://ct.etsoo.com'
-}
+};

@@ -1,8 +1,11 @@
 {
+    "cancel": "取消",
     "confirm": "确认",
     "data_error": "传递的数据错误！",
     "error": "错误",
     "etsoo": "亿速思维",
+    "input": "输入",
+    "inaccessible": "您的Internet服务或远程服务器已关闭，无法访问！",
     "language": "语言",
     "more": "更多",
     "no": "否",
@@ -10,5 +13,6 @@
     "ok": "确定",
     "result": "结果",
     "total": "合计",
+    "try_again": "重试",
     "yes": "是"
 }

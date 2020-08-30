@@ -1,35 +1,44 @@
-import React from 'react'
-import { AppBar, Toolbar, Typography, Hidden, Button, MenuItem, IconButton, ListItemIcon, ListItemText, Menu, Divider, makeStyles, Theme } from "@material-ui/core"
-import { Link } from 'react-router-dom'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import MenuIcon from '@material-ui/icons/Menu'
-import LockIcon from '@material-ui/icons/Lock'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import { SearchBar } from 'etsoo-react'
+import React from 'react';
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    Hidden,
+    Button,
+    MenuItem,
+    IconButton,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    Divider,
+    makeStyles,
+    Theme
+} from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuIcon from '@material-ui/icons/Menu';
+import LockIcon from '@material-ui/icons/Lock';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { SearchBar } from 'etsoo-react';
 
 // Make styles
-const useStyles = makeStyles<Theme, ICustomStyle>((theme) => ({
+const useStyles = makeStyles<Theme, { drawerWidth: number }>((theme) => ({
     appBar: {
         [theme.breakpoints.up('lg')]: {
-            width: ({drawerWidth}) => `calc(100% - ${drawerWidth}px)`,
-            marginLeft: ({drawerWidth}) => `${drawerWidth}px`
+            width: ({ drawerWidth }) => `calc(100% - ${drawerWidth}px)`,
+            marginLeft: ({ drawerWidth }) => `${drawerWidth}px`
         }
     },
     menuButton: {
         [theme.breakpoints.up('lg')]: {
-          display: 'none',
+            display: 'none'
         },
         marginRight: theme.spacing(0)
     },
     title: {
         flexGrow: 1
-    },
-}))
-
-// Custom style interface
-interface ICustomStyle {
-    drawerWidth: number
-}
+    }
+}));
 
 /**
  * App menu bar properities
@@ -38,145 +47,178 @@ export interface AppMenuBarProps {
     /**
      * Drawer width
      */
-    drawerWidth: number
+    drawerWidth: number;
 
     /**
      * Drawer open handler
      */
-    onDrawerOpen: React.MouseEventHandler
+    onDrawerOpen: React.MouseEventHandler;
 
     /**
      * Signout handler
      */
-    onSignout: React.MouseEventHandler
+    onSignout: React.MouseEventHandler;
 
     /**
      * Page title
      */
-    pageTitle?: string
+    pageTitle?: string;
 
     /**
      * Search bar
      */
-    search?: boolean
+    search?: boolean;
 
     /**
      * User name
      */
-    userName?: string
+    userName?: string;
 }
 
 /**
  * App menu bar
  * @param props Properties
  */
-export const AppMenuBar = React.forwardRef<any, AppMenuBarProps>(({ drawerWidth, onDrawerOpen, onSignout, pageTitle, search, userName }, ref) => {
-    // Style
-    const classes = useStyles({drawerWidth: drawerWidth})
+export const AppMenuBar = React.forwardRef<unknown, AppMenuBarProps>(
+    (props, ref) => {
+        // Destruct
+        const {
+            drawerWidth,
+            onDrawerOpen,
+            onSignout,
+            pageTitle,
+            search,
+            userName
+        } = props;
 
-    // Menu anchor element and update
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+        // Style
+        const classes = useStyles({ drawerWidth });
 
-    // Is the menu opened
-    const open = Boolean(anchorEl)
+        // Menu anchor element and update
+        const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(
+            null
+        );
 
-    // Title ref
-    const titleRef = React.useRef<HTMLElement>(null)
+        // Is the menu opened
+        const open = Boolean(anchorEl);
 
-    // Icon click for menu
-    const menuIconHandler = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget)
-    }
+        // Title ref
+        const titleRef = React.useRef<HTMLElement>(null);
 
-    // Close menu handler
-    const closeMenuHandler = () => {
-        setAnchorEl(null)
-    }
+        // Icon click for menu
+        const menuIconHandler = (event: React.MouseEvent<HTMLElement>) => {
+            setAnchorEl(event.currentTarget);
+        };
 
-    // Search bar focus handler
-    const onBarFocus = () => {
-        if(titleRef.current)
-            titleRef.current.style.display = 'none'
-    }
+        // Close menu handler
+        const closeMenuHandler = () => {
+            setAnchorEl(null);
+        };
 
-    // Search bar blur handler
-    const onBarBlur = () => {
-        if(titleRef.current)
-            titleRef.current.style.display = 'block'
-    }
+        // Search bar focus handler
+        const onBarFocus = () => {
+            if (titleRef.current) {
+                titleRef.current.style.display = 'none';
+            }
+        };
 
-    return (
-        <AppBar position="sticky" className={classes.appBar} ref={ref}>
-            <Toolbar>
-                <IconButton className={classes.menuButton} edge="start" color="inherit" onClick={onDrawerOpen}>
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" className={classes.title} ref={titleRef} noWrap>
-                    {pageTitle}
-                </Typography>
-                {search && (
-                    <>
-                        <Hidden smUp>
-                            <SearchBar onFocus={onBarFocus} onBlur={onBarBlur} />
-                        </Hidden>
-                        <Hidden xsDown>
-                            <SearchBar />
-                        </Hidden>
-                    </>
-                    
-                )}
-                <div>
-                    <Hidden xsDown>
-                        <Button
-                            variant="contained"
-                            color="default"
-                            size="small"
-                            endIcon={<AccountCircle />}
-                            onClick={menuIconHandler}
-                        >
-                            {userName}
-                        </Button>
-                    </Hidden>
-                    <Hidden smUp>
-                        <IconButton
-                            color="inherit"
-                            edge="end"
-                            onClick={menuIconHandler}
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </Hidden>
-                    <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right'
-                        }}
-                        keepMounted
-                        open={open}
-                        onClose={closeMenuHandler}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right'
-                        }}
+        // Search bar blur handler
+        const onBarBlur = () => {
+            if (titleRef.current) {
+                titleRef.current.style.display = 'block';
+            }
+        };
+
+        return (
+            <AppBar position="sticky" className={classes.appBar} ref={ref}>
+                <Toolbar>
+                    <IconButton
+                        className={classes.menuButton}
+                        edge="start"
+                        color="inherit"
+                        onClick={onDrawerOpen}
                     >
-                        <MenuItem button component={Link} to="/user/changepassword" onClick={closeMenuHandler}>
-                            <ListItemIcon>
-                                <LockIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Change password" />
-                        </MenuItem>
-                        <Divider />
-                        <MenuItem onClick={onSignout}>
-                            <ListItemIcon>
-                                <ExitToAppIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Sign out" />
-                        </MenuItem>
-                    </Menu>
-                </div>
-            </Toolbar>
-        </AppBar>
-    )
-})
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h6"
+                        className={classes.title}
+                        ref={titleRef}
+                        noWrap
+                    >
+                        {pageTitle}
+                    </Typography>
+                    {search && (
+                        <>
+                            <Hidden smUp>
+                                <SearchBar
+                                    onFocus={onBarFocus}
+                                    onBlur={onBarBlur}
+                                />
+                            </Hidden>
+                            <Hidden xsDown>
+                                <SearchBar />
+                            </Hidden>
+                        </>
+                    )}
+                    <div>
+                        <Hidden xsDown>
+                            <Button
+                                variant="contained"
+                                color="default"
+                                size="small"
+                                endIcon={<AccountCircle />}
+                                onClick={menuIconHandler}
+                            >
+                                {userName}
+                            </Button>
+                        </Hidden>
+                        <Hidden smUp>
+                            <IconButton
+                                color="inherit"
+                                edge="end"
+                                onClick={menuIconHandler}
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                        </Hidden>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right'
+                            }}
+                            keepMounted
+                            open={open}
+                            onClose={closeMenuHandler}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right'
+                            }}
+                        >
+                            <MenuItem
+                                button
+                                component={Link}
+                                to="/user/changepassword"
+                                onClick={closeMenuHandler}
+                            >
+                                <ListItemIcon>
+                                    <LockIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Change password" />
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem onClick={onSignout}>
+                                <ListItemIcon>
+                                    <ExitToAppIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Sign out" />
+                            </MenuItem>
+                        </Menu>
+                    </div>
+                </Toolbar>
+            </AppBar>
+        );
+    }
+);

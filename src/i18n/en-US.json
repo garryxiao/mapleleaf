@@ -1,8 +1,11 @@
 {
+    "cancel": "Cancel",
     "confirm": "Confirm",
     "data_error": "The data passed is wrong!",
     "error": "Error",
     "etsoo": "ETSOO",
+    "input": "Input",
+    "inaccessible": "Your Internet service or the remote server is down, inaccessible!",
     "language": "Language",
     "more": "More",
     "no": "No",
@@ -10,5 +13,6 @@
     "ok": "OK",
     "result": "Result",
     "total": "Total",
+    "try_again": "Try again",
     "yes": "Yes"
 }
